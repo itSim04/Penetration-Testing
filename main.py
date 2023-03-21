@@ -2,20 +2,26 @@ import sys, urllib, re
 
 master = sys.argv[1]
 
-req = urllib.request.Request(master)
-webUrl = urllib.request.urlopen(req)
-print(webUrl)
-                                    
-link_pattern = r'href="[^#\"]{2,}?"'
+def extractLinks(url, links):
 
-refs = re.findall(link_pattern, webUrl.read().decode())
-print(refs)
+    req = urllib.request.Request(url)
+    webUrl = urllib.request.urlopen(req)
 
-cleaning_pattern = r'".*"'
+    links_pattern = r'href="[^#\"]{2,}?"'
 
-with open("./links.bat", 'w') as links_output:
+    refs = re.findall(links_pattern, webUrl.read().decode())
+
+    cleaning_pattern = r'".*"'
+        
+    links.write(url + ":\n\n")
 
     for ref in refs:
 
         line = re.findall(cleaning_pattern, ref)[0][1:-1]
-        links_output.write(line)
+        links.write("\t" + line + "\n")
+        links.flush()
+
+    links.write("\n\n")
+
+with open("./links.bat", 'w') as links_output:
+    extractLinks(master, links_output)
