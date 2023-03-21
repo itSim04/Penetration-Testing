@@ -10,3 +10,11 @@ link_pattern = r'href="[^#\"]{2,}?"'
 
 refs = re.findall(link_pattern, webUrl.read().decode())
 print(refs)
+
+cleaning_pattern = r'".*"'
+result = []
+    
+for ref in refs:
+
+    line = re.findall(cleaning_pattern, ref)[0][1:-1]
+    result.append(line)
