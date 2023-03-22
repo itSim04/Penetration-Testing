@@ -243,44 +243,61 @@ def cleanUrls(master):
 
     return (master, sub_master, sur_master)
 
-# If 
+# If a URL was provided
 if(len(sys.argv) >= 2):
 
+    # Takes the URL from the Terminal
     master = sys.argv[1]
 
+    # Validates the URL
     if is_valid_url(master):
 
+        # Breaks down the URL
         (master, sub_master, sur_master) = cleanUrls(master)
 
+        # Opens the subdomains file
         with open("./subdomains_output.bat", 'w') as domains_output:
 
+            # Opens the directories and files file
             with open("./dirs_files_output.bat", 'w') as dirs_output:
-                    
+
+                # Opens a file to write links in
                 with open("./links.bat", 'w') as links_output:
 
+                    # Extracts links
                     extractLinks(master, links_output)
 
+                    # Checks if an argument is provided. Executes anyway if not
                     if len(sys.argv) == 2 or sys.argv[2] == '-d':
 
+                        # Opens a file to write directories in
                         with open("./dirs_dictionary.bat", "r") as dirs:
 
-                            for line in dirs.readlines()[0:15]:
-                                    
+                            # Iterates through the file
+                            for line in dirs.readlines():
+                                
+                                # Extracts the directories
                                 extractDirectories(master, line, dirs_output, links_output)
 
+                    # Checks if an argument is provided. Executes anyway if not
                     if len(sys.argv) == 2 or sys.argv[2] == '-s':
 
+                        # Opens a file to write subdomains in
                         with open("./subdomains_dictionary.bat", "r") as dirs:
 
-                                for line in dirs.readlines()[0:15]:
+                                # Iterates through the file
+                                for line in dirs.readlines():
                                     
+                                    # Extracts the subdomains
                                     extractSubdomains(line, domains_output, links_output, sur_master, sub_master)                        
 
+                    # Checks if an argument is provided
                     if len(sys.argv) == 2 and sys.argv[2] == '-b':
                                     
                         if len(sys.argv) == 3:
                             
-                            bruteForce(5, sys.argv[3])                        
+                            # Attempts bruteforce on the Username from the terminal
+                            bruteForce(12, sys.argv[3])                        
 
                         else:
 
