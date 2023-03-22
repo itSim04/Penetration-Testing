@@ -1,4 +1,4 @@
-import sys, urllib, re, requests, time
+import sys, urllib, re, requests, time, string, itertools
 
 def is_valid_url(url):
 
@@ -97,6 +97,19 @@ def extractSubdomains(line, output, links):
             print("Waiting")
             time.sleep(5)
 
+def generatePasswords(length):
+
+    characters = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
+
+    combinations = itertools.product(characters, repeat=length)
+
+    strings = [''.join(combination) for combination in combinations]
+
+    for s in strings:
+
+        print(s)
+
+
 def cleanUrls(master):
 
     if not master.startswith("http"):
@@ -161,11 +174,13 @@ if(len(sys.argv) >= 2):
                                     
                                     extractSubdomains(line, domains_output, links_output)                        
 
+                    if len(sys.argv) == 2 or sys.argv[2] == '-b':
+                                    
+                        generatePasswords(5)                        
+
     else:
 
-        print("Invalid URL")           
-
-                    
+        print("Invalid URL")                  
 
 else:
 
