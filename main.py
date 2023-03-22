@@ -139,22 +139,21 @@ if(len(sys.argv) >= 2):
 
                     extractLinks(master, links_output)
 
+                    if len(sys.argv) == 2 or sys.argv[2] == '-d':
 
-                    with open("./dirs_dictionary.bat", "r") as dirs:
+                        with open("./dirs_dictionary.bat", "r") as dirs:
 
-                        for line in dirs.readlines()[0:15]:
+                            for line in dirs.readlines()[0:15]:
                                     
-                            extractDirectories(line, dirs_output, links_output)
+                                extractDirectories(line, dirs_output, links_output)
 
-                    with open("./subdomains_dictionary.bat", "r") as dirs:
+                    if len(sys.argv) == 2 or sys.argv[2] == '-s':
 
-                        for line in dirs.readlines()[0:15]:
+                        with open("./subdomains_dictionary.bat", "r") as dirs:
+
+                                for line in dirs.readlines()[0:15]:
                                     
-                            extractSubdomains(line, domains_output, links_output)
-
-
-
-                        
+                                    extractSubdomains(line, domains_output, links_output)                        
 
     else:
 
