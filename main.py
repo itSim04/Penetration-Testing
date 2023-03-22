@@ -27,27 +27,32 @@ with open("./links.bat", 'w') as links_output:
 
     extractLinks(master, links_output)
 
-    with open("./dirs_dictionary.bat", "r") as dirs:
+    with open("./dirs_files_output.bat", 'w') as dirs_output:
 
-        for line in dirs.readlines()[0:15]:
-                                                                
-            code = 429
+        with open("./dirs_dictionary.bat", "r") as dirs:
             
-    while code == 429:
-            
-        code = requests.get(master + line.rstrip('\n')).status_code
-        if code == 404:
+            for line in dirs.readlines()[0:15]:
+                                                                    
+                code = 429
 
-            print('Directory/File does not exist: ' + line.rstrip('\n'))
+        while code == 429:
+                
+            code = requests.get(master + line.rstrip('\n')).status_code
+            if code == 404:
 
-        elif code // 100 == 2 or code == 403:
+                print('Directory/File does not exist: ' + line.rstrip('\n'))
 
-            print('Directory/File does exist: ' + line.rstrip('\n') + " " + str(code))             
+            elif code // 100 == 2 or code == 403:
 
-        if code == 429:
+                print('Directory/File does exist: ' + line.rstrip('\n') + " " + str(code))    
 
-            print("Waiting")
-            time.sleep(5)
+                dirs_output.write(master + line.rstrip('\n') + "\t" + str(code) + "\n" )
+                dirs_output.flush()         
+
+            if code == 429:
+
+                print("Waiting")
+                time.sleep(5)
 
        
 
