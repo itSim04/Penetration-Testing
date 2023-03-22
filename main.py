@@ -23,6 +23,29 @@ def extractLinks(url, links):
 
     links.write("\n\n")
 
+
+def extractDirectories(url, line, output):
+
+    code = 429
+    while code == 429:
+                        
+        code = requests.get(url + line.rstrip('\n')).status_code
+        if code == 404:
+
+            print('Directory/File does not exist: ' + line.rstrip('\n'))
+
+        elif code // 100 == 2 or code == 403:
+
+            print('Directory/File does exist: ' + line.rstrip('\n') + " " + str(code))    
+
+            output.write(url + line.rstrip('\n') + "\t" + str(code) + "\n" )
+            output.flush()         
+
+        elif code == 429:
+
+            print("Waiting")
+            time.sleep(5)
+
 with open("./links.bat", 'w') as links_output:
 
     extractLinks(master, links_output)
@@ -33,26 +56,7 @@ with open("./links.bat", 'w') as links_output:
             
             for line in dirs.readlines()[0:15]:
                                                                     
-                code = 429
-
-        while code == 429:
-                
-            code = requests.get(master + line.rstrip('\n')).status_code
-            if code == 404:
-
-                print('Directory/File does not exist: ' + line.rstrip('\n'))
-
-            elif code // 100 == 2 or code == 403:
-
-                print('Directory/File does exist: ' + line.rstrip('\n') + " " + str(code))    
-
-                dirs_output.write(master + line.rstrip('\n') + "\t" + str(code) + "\n" )
-                dirs_output.flush()         
-
-            if code == 429:
-
-                print("Waiting")
-                time.sleep(5)
+                extractDirectories(master, line, dirs_output)
 
        
 
