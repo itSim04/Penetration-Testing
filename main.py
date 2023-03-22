@@ -9,7 +9,13 @@ def is_valid_url(url):
 
 def extractLinks(url, links):
 
-    req = urllib.request.Request(url)
+    req = urllib.request.Request(
+
+        url=url, 
+        headers={'User-Agent': 'Mozilla/5.0'}
+
+    )
+
     webUrl = urllib.request.urlopen(req)
 
     links_pattern = r'href="[^#\"]{2,}?"'
