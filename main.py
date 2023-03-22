@@ -1,6 +1,6 @@
 import sys, urllib, re, requests, time
 
-master = sys.argv[1]
+
 
 def extractLinks(url, links):
 
@@ -50,7 +50,42 @@ def extractDirectories(url, line, links, output):
             print("Waiting")
             time.sleep(5)
 
+def cleanUrls(master):
+
+    if not master.startswith("http"):
+
+            if not master.startswith("www."):
+
+                master = "https://www." + master
+
+            else: 
+
+                master = "https://" + master
+    else:
+
+            if not re.sub("https?:\/\/", "", master).startswith("www."):
+
+                flag = False
+                if master.find("https") != -1:
+
+                    flag = True
+
+                master = ("https" if flag else "http") + "://www." + re.sub(r"https?://", "", master)
+
+
+            
+    components = master.split("//")
+    master = master.split("//")[0] + "//" + master.split("//")[1] + "/"
+
+    sur_master = components[0] + "//"
+    sub_master = re.sub("www\.", "", components[1])
+
+    return (master, sub_master, sur_master)
+
 with open("./links.bat", 'w') as links_output:
+
+    master = sys.argv[1]
+    (master, sub_master, sur_master) = cleanUrls(master)
 
     extractLinks(master, links_output)
 
