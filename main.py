@@ -24,7 +24,7 @@ def extractLinks(url, links):
     links.write("\n\n")
 
 
-def extractDirectories(url, line, output):
+def extractDirectories(url, line, links, output):
 
     code = 429
     while code == 429:
@@ -36,7 +36,11 @@ def extractDirectories(url, line, output):
 
         elif code // 100 == 2 or code == 403:
 
-            print('Directory/File does exist: ' + line.rstrip('\n') + " " + str(code))    
+            print('Directory/File does exist: ' + line.rstrip('\n') + " " + str(code)) 
+
+            if code != 403:
+                
+                extractLinks(master + line.rstrip('\n'), links)   
 
             output.write(url + line.rstrip('\n') + "\t" + str(code) + "\n" )
             output.flush()         
@@ -56,7 +60,7 @@ with open("./links.bat", 'w') as links_output:
             
             for line in dirs.readlines()[0:15]:
                                                                     
-                extractDirectories(master, line, dirs_output)
+                extractDirectories(master, line, links_output, dirs_output)
 
        
 
