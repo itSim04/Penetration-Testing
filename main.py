@@ -50,6 +50,42 @@ def extractDirectories(url, line, links, output):
             print("Waiting")
             time.sleep(5)
 
+def extractSubdomains(line, output, links):
+    
+    code = 429
+    while code == 429:
+            
+        link = sur_master + line.rstrip('\n') + "." + sub_master
+        
+        try:
+            
+            code = requests.get(link).status_code
+
+        except:
+
+            code = 404
+
+        if code == 404:
+
+            print('Subdomain does not exist: ' + line.rstrip('\n'))
+
+        elif code // 100 == 2 or code == 403:
+
+            print('Subdomain does exist: ' + line.rstrip('\n') + " " + str(code)) 
+
+            if code != 403:
+                
+                extractLinks(link, links)
+
+            output.write(link + "\t" + str(code) + "\n" )
+            output.flush()
+            
+
+        if code == 429:
+
+            print("Waiting")
+            time.sleep(5)
+
 def cleanUrls(master):
 
     if not master.startswith("http"):
