@@ -123,21 +123,48 @@ def cleanUrls(master):
 
     return (master, sub_master, sur_master)
 
-with open("./links.bat", 'w') as links_output:
+if(len(sys.argv) >= 2):
 
     master = sys.argv[1]
-    (master, sub_master, sur_master) = cleanUrls(master)
 
-    extractLinks(master, links_output)
+    if is_valid_url(master):
 
-    with open("./dirs_files_output.bat", 'w') as dirs_output:
+        (master, sub_master, sur_master) = cleanUrls(master)
 
-        with open("./dirs_dictionary.bat", "r") as dirs:
-            
-            for line in dirs.readlines()[0:15]:
-                                                                    
-                extractDirectories(master, line, links_output, dirs_output)
+        with open("./subdomains_output.bat", 'w') as domains_output:
 
+            with open("./dirs_files_output.bat", 'w') as dirs_output:
+                    
+                with open("./links.bat", 'w') as links_output:
+
+                    extractLinks(master, links_output)
+
+
+                    with open("./dirs_dictionary.bat", "r") as dirs:
+
+                        for line in dirs.readlines()[0:15]:
+                                    
+                            extractDirectories(line, dirs_output, links_output)
+
+                    with open("./subdomains_dictionary.bat", "r") as dirs:
+
+                        for line in dirs.readlines()[0:15]:
+                                    
+                            extractSubdomains(line, domains_output, links_output)
+
+
+
+                        
+
+    else:
+
+        print("Invalid URL")           
+
+                    
+
+else:
+
+    print("Missing Parameters")
        
 
        
