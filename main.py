@@ -1,4 +1,4 @@
-import sys, urllib, re, requests
+import sys, urllib, re, requests, time
 
 master = sys.argv[1]
 
@@ -31,15 +31,23 @@ with open("./links.bat", 'w') as links_output:
 
         for line in dirs.readlines()[0:15]:
                                                                 
-            code = requests.get(master + line.rstrip('\n')).status_code
-
-            if code == 404:
-
-                print('Directory/File does not exist: ' + line.rstrip('\n'))
+            code = 429
             
-            elif code // 100 == 2 or code == 403:
+    while code == 429:
+            
+        code = requests.get(master + line.rstrip('\n')).status_code
+        if code == 404:
 
-                print('Directory/File does exist: ' + line.rstrip('\n') + " " + str(code)) 
+            print('Directory/File does not exist: ' + line.rstrip('\n'))
+
+        elif code // 100 == 2 or code == 403:
+
+            print('Directory/File does exist: ' + line.rstrip('\n') + " " + str(code))             
+
+        if code == 429:
+
+            print("Waiting")
+            time.sleep(5)
 
        
 
