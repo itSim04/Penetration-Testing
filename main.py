@@ -1,6 +1,11 @@
 import sys, urllib, re, requests, time
 
+def is_valid_url(url):
 
+    pattern = r"^((http|https):\/\/)?(www\.)?([\w\-\.]+)+$"
+    obj = re.match(pattern, url)
+        
+    return obj
 
 def extractLinks(url, links):
 
